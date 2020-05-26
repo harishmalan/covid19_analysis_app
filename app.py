@@ -33,13 +33,15 @@ day_wise = day_wise_dataframe(covid19_country)
 country_wise = pd.DataFrame
 country_wise = country_wise_dataframe(covid19_country)
 country_wise['iso_alpha'] =country_wise['Country'].map(COUNTIES_ISO)
-
+datatabler = country_wise[['Country','Confirmed','Deaths','Recovered','Active']]
 # Multi-dropdown options
 from controls import COUNTIES, WELL_STATUSES, WELL_TYPES, WELL_COLORS
 
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("data").resolve()
+
+
 
 app = dash.Dash(
     __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
@@ -137,8 +139,8 @@ app.layout = html.Div(
                 html.Div(
                     [
                         html.A(
-                            html.Button("Learn More", id="learn-more-button"),
-                            href="https://plot.ly/dash/pricing/",
+                            html.Button("Developer Info", id="learn-more-button"),
+                            href="http://www.harishmalan.com/",
                         )
                     ],
                     className="one-third column",
@@ -168,7 +170,7 @@ app.layout = html.Div(
                         dcc.Dropdown(
                             id="well_statuses",
                             options=county_options,
-                            value= 'United States',
+                            value= 'Singapore',
                             multi=False,)],
                             className="dcc_control six columns",
                         ),
@@ -191,11 +193,6 @@ app.layout = html.Div(
                                 html.Div(
                                     [html.H6(id="recovery_left"), html.P("Recovered")],
                                     id="country_recovery",
-                                    className="mini_container",
-                                ),
-                                html.Div(
-                                    [html.H6(id="active_left"), html.P("Active")],
-                                    id="country_active",
                                     className="mini_container",
                                 ),
                                 html.Div(
@@ -257,11 +254,6 @@ app.layout = html.Div(
                                     id="recovery",
                                     className="mini_container",
                                 ),
-                                html.Div(
-                                    [html.H6(id="world_Active"), html.P("Active")],
-                                    id="active",
-                                    className="mini_container",
-                                ),
                                   html.Div(
                                     [html.H6(id="world_new"), html.P("New Cases")],
                                     id="active_new",
@@ -316,11 +308,11 @@ app.layout = html.Div(
         html.Div(
             [
                 html.Div(
-                    [dcc.Graph(id="pie_graph")],
+                    [html.Div(id="main_graph_pred")],
                     className="pretty_container six columns",
                 ),
                 html.Div(
-                    [dcc.Graph(id="aggregate_graph")],
+                    [html.Div(id="main_graph_preds")],
                     className="pretty_container six columns",
                 ),
             ],
@@ -341,12 +333,12 @@ app.layout = html.Div(
             are transmitted from human to human, and where recovery confers lasting resistance, such as measles, mumps and rubella. '''),
             dcc.Markdown('''Each member of the population typically progresses from susceptible to infectious to recovered. This can be 
             shown as a flow diagram in which the boxes represent the different compartments and the arrows the transition between compartments, i.e.
-            ![COVID-19](https://lh6.googleusercontent.com/WwmVkWAdqQmQpVAKBad1PAVS3AtsLnkbgl2M0k2Tyr6DDPEol1PzpYHeySEIO_dLxqaxJ1NVUmKl5bvlEciMrZtTLsC3vxBmD72xnlX37Wd8p1lBOum2dW4fsDXTw3sm8KjJ8SpnbqWKpJxc2A)
+            ![](https://institutefordiseasemodeling.github.io/Documentation/malaria/_images/SIR-SIRS.png)
             '''),
             dcc.Markdown('''In multiple models developed for COVID-19 (diffusion medium: Airborne Droplet) by experts and researchers they try to 
             estimate the right set of parameters for the region/country. As per the CDC and WHO, the R0 for COVID-19 is definitely above 2. 
             Some sources say it is between 3-5.
-            '''),
+            ''' ),
             dcc.Markdown('''
             In the model, the value R0 is an estimate of the number of people an average infected person will spread the disease to. If the value of R0 
             is greater than 1 then the disease probably continues to spread and if it is < 1 then the disease slowly dies down. Since COVID-19’s R0 is > 2, 
@@ -359,6 +351,16 @@ app.layout = html.Div(
             of these parameters. I also came across a blog “COVID-19 dynamics with SIR model” on how to estimate these parameters from available COVID-19 data. 
             It turns out that the differential equations can be easily solved and tuning of the parameters of the model can be done using the “solve_ivp” function in the scipy module. 
             '''),
+            dcc.Markdown('''
+            ### what Can we Do ?
+            Since there is no vaccine available right now, the only way to handle the spread is to slow down the transmission. As it can be seen even in the 
+            under-estimates and from the actual data around us, the sharply increasing number of cases is bound to overwhelm the medical infrastructure of any
+             nation. So, by slowing down the transmission, we don’t actually stop the spread but keep the transmission and the active cases at any point in time
+            well within the limits of the medical handling capacity. This is what is being referred to as “Flattening The Curve”. 
+            
+            ![](https://image.cnbcfm.com/api/v1/image/106451928-1584626557121flatteningthecurve740px.png?v=1584626602&w=740&h=416)
+            '''),
+
 
             # ![COVID-19](https://lh6.googleusercontent.com/WwmVkWAdqQmQpVAKBad1PAVS3AtsLnkbgl2M0k2Tyr6DDPEol1PzpYHeySEIO_dLxqaxJ1NVUmKl5bvlEciMrZtTLsC3vxBmD72xnlX37Wd8p1lBOum2dW4fsDXTw3sm8KjJ8SpnbqWKpJxc2A)
             # ''')
@@ -383,7 +385,7 @@ app.layout = html.Div(
    dash_table.DataTable(
         id='datatable-interactivity',
         columns=[
-            {"name": i, "id": i, "deletable": True, "selectable": True} for i in country_wise.columns
+            {"name": i, "id": i, "deletable": True, "selectable": True} for i in datatabler.columns
         ],
         data=country_wise.to_dict('records'),
         editable=True,
@@ -398,6 +400,7 @@ app.layout = html.Div(
         page_action="native",
         page_current= 0,
         page_size= 10,
+        
     ),
     html.Div(id='datatable-interactivity-container')
 ]),
@@ -405,6 +408,7 @@ app.layout = html.Div(
     ],
     id="mainContainer",
     style={"display": "flex", "flex-direction": "column"},
+    className= "row flex-display",
 )
 
 # Selectors -> well text
@@ -413,7 +417,6 @@ app.layout = html.Div(
     Output("confirm_left", "children"),
     Output("death_left", "children"),
     Output("recovery_left", "children"),
-    Output("active_left", "children"),
     Output("new_left", "children"),
     ],
     [
@@ -422,14 +425,13 @@ app.layout = html.Div(
 )
 def update_well_text(well_statuses):
     temp= country_wise[country_wise['Country']==well_statuses]
-    return temp['Confirmed'],temp['Deaths'], temp['Recovered'], temp['Active'], temp['New cases']
+    return temp['Confirmed'],temp['Deaths'], temp['Recovered'], temp['New cases']
 
 @app.callback(
     [
         Output("world_confirm", "children"),
         Output("world_death", "children"),
         Output("world_recovery", "children"),
-        Output("world_Active", "children"),
          Output("world_new", "children"),
     ],
     [
@@ -441,7 +443,7 @@ def update_well_text(well_statuses):
     # dff = filter_dataframe(well_statuses)
     temp = covid19_country.groupby('Date')['Confirmed', 'Deaths', 'Recovered', 'Active', 'New cases'].sum().reset_index()
     temp = temp[temp['Date']==max(temp['Date'])].reset_index(drop=True)
-    return temp['Confirmed'],temp['Deaths'], temp['Recovered'], temp['Active'], temp['New cases']
+    return temp['Confirmed'],temp['Deaths'], temp['Recovered'], temp['New cases']
 
 # @app.callback(
 #     Output('datatable-interactivity', 'style_data_conditional'),
@@ -622,8 +624,7 @@ def update_value(well_statuses):
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
     dff= covid19_country[covid19_country['Country']==well_statuses]
-    dff.reset_index(inplace=True)
-    dff.set_index("Date", inplace=True)
+
 
     return dcc.Graph(
         id='example-graph',
@@ -663,7 +664,106 @@ def update_value(well_statuses):
             }
         }
     )
+@app.callback(
+    Output(component_id='main_graph_pred', component_property='children'),
+    [Input(component_id='well_statuses', component_property='value')]
+)
+def update_value(well_statuses):
+    layout_aggregate = copy.deepcopy(layout)
+    # day_wise.reset_index(inplace=True)
+    # day_wise.set_index("Date", inplace=True)
+    dff = pd.read_csv(DATA_PATH.joinpath(well_statuses+".csv"), low_memory=False, index_col=0)
+    # dff.reset_index(inplace=True)
+    # dff.set_index("Date", inplace=True)
 
+    return dcc.Graph(
+        id='example-graph',
+        figure={
+            'data': [
+                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': well_statuses, 'mode':'lines+markers', 'name':"Confirmed"},
+                dict(
+                    type="scatter",
+                    mode="lines",
+                    name="Susceptible",
+                    x=dff.index,
+                    y=dff['Susceptible'],
+                    line=dict(shape="spline", smoothing="2", color="#F9ADA0"),
+                    ),
+                dict(
+                    type="scatter",
+                    mode="lines",
+                    name="Infected",
+                    x=dff.index,
+                    y=dff['Infected'],
+                    line=dict(shape="spline", smoothing="2", color="#849E68"),
+                    ),
+                dict(
+                    type="scatter",
+                    mode="lines",
+                    name="Recovered",
+                    x=dff.index,
+                    y=dff['Recovered'],
+                    line=dict(shape="spline", smoothing="2", color="#59C3C3"),
+                    ),
+                
+            ],
+            'layout': {
+                'title': "Predicting Suspect Infection Curve Report ("+well_statuses+")",
+                 'y_title': "New confirmed Cases",
+                 'x_axis_tickangle': 180
+            }
+        }
+    )
+@app.callback(
+    Output(component_id='main_graph_preds', component_property='children'),
+    [Input(component_id='well_statuses', component_property='value')]
+)
+def update_value(well_statuses):
+    layout_aggregate = copy.deepcopy(layout)
+    # day_wise.reset_index(inplace=True)
+    # day_wise.set_index("Date", inplace=True)
+    dff = pd.read_csv(DATA_PATH.joinpath("Singapore.csv"), low_memory=False, index_col=0)
+    # dff.reset_index(inplace=True)
+    # dff.set_index("Date", inplace=True)
+
+    return dcc.Graph(
+        id='example-graph',
+        figure={
+            'data': [
+                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': well_statuses, 'mode':'lines+markers', 'name':"Confirmed"},
+                dict(
+                    type="scatter",
+                    mode="lines",
+                    name="Susceptible",
+                    x=dff.index,
+                    y=dff['Susceptible'],
+                    line=dict(shape="spline", smoothing="2", color="#F9ADA0"),
+                    ),
+                dict(
+                    type="scatter",
+                    mode="lines",
+                    name="Infected",
+                    x=dff.index,
+                    y=dff['Infected'],
+                    line=dict(shape="spline", smoothing="2", color="#849E68"),
+                    ),
+                dict(
+                    type="scatter",
+                    mode="lines",
+                    name="Recovered",
+                    x=dff.index,
+                    y=dff['Recovered'],
+                    line=dict(shape="spline", smoothing="2", color="#59C3C3"),
+                    ),
+                
+            ],
+            'layout': {
+                'title': "Singapore Infection Will Reduce after June 15th",
+                 'y_title': "New confirmed Cases",
+                 'x_axis_tickangle': 180
+            }
+        }
+    )
 # Main
 if __name__ == "__main__":
     app.run_server(debug=True)
