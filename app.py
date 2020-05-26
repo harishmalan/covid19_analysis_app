@@ -333,8 +333,21 @@ app.layout = html.Div(
             are transmitted from human to human, and where recovery confers lasting resistance, such as measles, mumps and rubella. '''),
             dcc.Markdown('''Each member of the population typically progresses from susceptible to infectious to recovered. This can be 
             shown as a flow diagram in which the boxes represent the different compartments and the arrows the transition between compartments, i.e.
-            ![](https://institutefordiseasemodeling.github.io/Documentation/malaria/_images/SIR-SIRS.png)
             '''),
+                html.Div(
+                    [
+                        html.Img(
+                            src=app.get_asset_url("SIR-SIRS.png"),
+                            id="plotly-image2",
+                            style={
+                                "height": "120px",
+                                "width": "auto",
+                                "margin-bottom": "25px",
+                            },
+                        )
+                    ],
+                    #className="one-third column",
+                ),
             dcc.Markdown('''In multiple models developed for COVID-19 (diffusion medium: Airborne Droplet) by experts and researchers they try to 
             estimate the right set of parameters for the region/country. As per the CDC and WHO, the R0 for COVID-19 is definitely above 2. 
             Some sources say it is between 3-5.
@@ -357,10 +370,22 @@ app.layout = html.Div(
             under-estimates and from the actual data around us, the sharply increasing number of cases is bound to overwhelm the medical infrastructure of any
              nation. So, by slowing down the transmission, we don’t actually stop the spread but keep the transmission and the active cases at any point in time
             well within the limits of the medical handling capacity. This is what is being referred to as “Flattening The Curve”. 
-            
-            ![](https://image.cnbcfm.com/api/v1/image/106451928-1584626557121flatteningthecurve740px.png?v=1584626602&w=740&h=416)
             '''),
-
+            html.Div(
+                    [
+                        html.Img(
+                            src=app.get_asset_url("flat_curve.png"),
+                            id="plotly-image1",
+                            style={
+                                "height": "200px",
+                                "width": "auto",
+                                "margin-bottom": "25px",
+                            },
+                        )
+                    ],
+                    className="one-third column",
+                ),
+           
 
             # ![COVID-19](https://lh6.googleusercontent.com/WwmVkWAdqQmQpVAKBad1PAVS3AtsLnkbgl2M0k2Tyr6DDPEol1PzpYHeySEIO_dLxqaxJ1NVUmKl5bvlEciMrZtTLsC3vxBmD72xnlX37Wd8p1lBOum2dW4fsDXTw3sm8KjJ8SpnbqWKpJxc2A)
             # ''')
