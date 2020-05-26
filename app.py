@@ -52,27 +52,27 @@ county_options = [
     for country in covid19_country.Country
 ]
 
-well_status_options = [
-    {"label": str(WELL_STATUSES[well_status]), "value": str(well_status)}
-    for well_status in WELL_STATUSES
-]
+# well_status_options = [
+#     {"label": str(WELL_STATUSES[well_status]), "value": str(well_status)}
+#     for well_status in WELL_STATUSES
+# ]
 
-well_type_options = [
-    {"label": str(WELL_TYPES[well_type]), "value": str(well_type)}
-    for well_type in WELL_TYPES
-]
+# well_type_options = [
+#     {"label": str(WELL_TYPES[well_type]), "value": str(well_type)}
+#     for well_type in WELL_TYPES
+# ]
 
 
-# Load data
-df = pd.read_csv(DATA_PATH.joinpath("wellspublic.csv"), low_memory=False)
-df["Date_Well_Completed"] = pd.to_datetime(df["Date_Well_Completed"])
-df = df[df["Date_Well_Completed"] > dt.datetime(1960, 1, 1)]
+# # Load data
+# df = pd.read_csv(DATA_PATH.joinpath("wellspublic.csv"), low_memory=False)
+# df["Date_Well_Completed"] = pd.to_datetime(df["Date_Well_Completed"])
+# df = df[df["Date_Well_Completed"] > dt.datetime(1960, 1, 1)]
 
-trim = df[["API_WellNo", "Well_Type", "Well_Name"]]
-trim.index = trim["API_WellNo"]
-dataset = trim.to_dict(orient="index")
+# trim = df[["API_WellNo", "Well_Type", "Well_Name"]]
+# trim.index = trim["API_WellNo"]
+# dataset = trim.to_dict(orient="index")
 
-points = pickle.load(open(DATA_PATH.joinpath("points.pkl"), "rb"))
+# points = pickle.load(open(DATA_PATH.joinpath("points.pkl"), "rb"))
 
 
 # Create global chart template
