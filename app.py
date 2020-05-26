@@ -44,7 +44,7 @@ DATA_PATH = PATH.joinpath("data").resolve()
 
 
 app = dash.Dash(
-    __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
+    __name__, meta_tags=[{"Covid19": "viewport", "content": "width=device-width"}]
 )
 server = app.server
 
@@ -429,7 +429,19 @@ app.layout = html.Div(
     ),
     html.Div(id='datatable-interactivity-container')
 ]),
-
+    dcc.Markdown('''
+   ### Reference Links: 
+Novel Coronavirus (COVID-19) Cases, provided by JHU CSSE  
+https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge  
+https://github.com/CSSEGISandData/COVID-19/tree/master/csse_COVID_19_data/csse_covid_19_time_series  
+https://github.com/CSSEGISandData/COVID-19/tree/web-data  
+https://scipython.com/book/chapter-8-scipy/additional-examples/the-sir-epidemic-model/  
+https://www.lewuathe.com/COVID-19-dynamics-with-sir-model.html  
+https://github.com/Lewuathe/COVID19-SIR  
+https://science.sciencemag.org/content/early/2020/03/05/science.aba9757  
+https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology  
+https://science.sciencemag.org/content/early/2020/03/05/science.aba9757/tab-figures-data  
+'''),
     ],
     id="mainContainer",
     style={"display": "flex", "flex-direction": "column"},
