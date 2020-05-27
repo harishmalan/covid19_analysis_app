@@ -96,7 +96,12 @@ layout = dict(
         zoom=7,
     ),
 )
-
+app.head = [
+    html.Link(
+        href='https://www.google.com/favicon.ico',
+        rel='icon'
+    ),
+]
 # Create app layout
 app.layout = html.Div(
     [
@@ -784,14 +789,14 @@ def update_value(well_statuses):
                     y=dff['Recovered / 100 Cases'],
                     line=dict(shape="spline", smoothing="2", color="#849E68"),
                     ),
-                dict(
-                    type="scatter",
-                    mode="lines",
-                    name="Deaths / 100 Recovered",
-                    x=dff.index,
-                    y=dff['Deaths / 100 Recovered'],
-                    line=dict(shape="spline", smoothing="2", color="#59C3C3"),
-                    ),
+                # dict(
+                #     type="scatter",
+                #     mode="lines",
+                #     name="Deaths / 100 Recovered",
+                #     x=dff.index,
+                #     y=dff['Deaths / 100 Recovered'],
+                #     line=dict(shape="spline", smoothing="2", color="#59C3C3"),
+                #     ),
                 
             ],
             'layout': {
