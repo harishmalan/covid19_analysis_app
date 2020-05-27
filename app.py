@@ -709,7 +709,7 @@ def update_value(well_statuses):
     layout_aggregate = copy.deepcopy(layout)
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
-    dff = pd.read_csv(DATA_PATH.joinpath(well_statuses+".csv"), low_memory=False, index_col=0)
+    dff = pd.read_csv(DATA_PATH.joinpath(well_statuses+".csv"),low_memory=False, index_col=0)
     # dff.reset_index(inplace=True)
     # dff.set_index("Date", inplace=True)
 
@@ -759,43 +759,43 @@ def update_value(well_statuses):
     layout_aggregate = copy.deepcopy(layout)
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
-    dff = pd.read_csv(DATA_PATH.joinpath("Singapore.csv"), low_memory=False, index_col=0)
-    # dff.reset_index(inplace=True)
-    # dff.set_index("Date", inplace=True)
+    dff = day_wise
+    dff.reset_index(inplace=True)
+    dff.set_index("Date", inplace=True)
 
     return dcc.Graph(
-        id='example-graph',
+        id='example-graph1',
         figure={
             'data': [
                 #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': well_statuses, 'mode':'lines+markers', 'name':"Confirmed"},
                 dict(
                     type="scatter",
                     mode="lines",
-                    name="Susceptible",
+                    name="Deaths / 100 Cases",
                     x=dff.index,
-                    y=dff['Susceptible'],
+                    y=dff['Deaths / 100 Cases'],
                     line=dict(shape="spline", smoothing="2", color="#F9ADA0"),
                     ),
                 dict(
                     type="scatter",
                     mode="lines",
-                    name="Infected",
+                    name="Recovered / 100 Cases",
                     x=dff.index,
-                    y=dff['Infected'],
+                    y=dff['Recovered / 100 Cases'],
                     line=dict(shape="spline", smoothing="2", color="#849E68"),
                     ),
                 dict(
                     type="scatter",
                     mode="lines",
-                    name="Recovered",
+                    name="Deaths / 100 Recovered",
                     x=dff.index,
-                    y=dff['Recovered'],
+                    y=dff['Deaths / 100 Recovered'],
                     line=dict(shape="spline", smoothing="2", color="#59C3C3"),
                     ),
                 
             ],
             'layout': {
-                'title': "Singapore Infection Will Reduce after June 15th",
+                'title': "Death's and Recovered Matrix Per 100 cases",
                  'y_title': "New confirmed Cases",
                  'x_axis_tickangle': 180
             }
