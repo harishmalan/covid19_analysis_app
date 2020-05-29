@@ -34,8 +34,8 @@ country_wise = pd.DataFrame
 country_wise = country_wise_dataframe(covid19_country)
 country_wise['iso_alpha'] =country_wise['Country'].map(COUNTIES_ISO)
 datatabler = country_wise[['Country','Confirmed','Deaths','Recovered','Active']]
-# Multi-dropdown options
-from controls import COUNTIES, WELL_STATUSES, WELL_TYPES, WELL_COLORS
+# # Multi-dropdown options
+# from controls import COUNTIES, WELL_STATUSES, WELL_TYPES, WELL_COLORS
 
 # get relative data folder
 PATH = pathlib.Path(__file__).parent
@@ -48,74 +48,30 @@ app = dash.Dash(
 )
 server = app.server
 
-# Create controls
+# Create Country for Drop Down
 county_options = [
     {"label": str(country), "value": str(country)}
     for country in covid19_country.Country
 ]
 
-# well_status_options = [
-#     {"label": str(WELL_STATUSES[well_status]), "value": str(well_status)}
-#     for well_status in WELL_STATUSES
-# ]
-
-# well_type_options = [
-#     {"label": str(WELL_TYPES[well_type]), "value": str(well_type)}
-#     for well_type in WELL_TYPES
-# ]
-
-
-# # Load data
-# df = pd.read_csv(DATA_PATH.joinpath("wellspublic.csv"), low_memory=False)
-# df["Date_Well_Completed"] = pd.to_datetime(df["Date_Well_Completed"])
-# df = df[df["Date_Well_Completed"] > dt.datetime(1960, 1, 1)]
-
-# trim = df[["API_WellNo", "Well_Type", "Well_Name"]]
-# trim.index = trim["API_WellNo"]
-# dataset = trim.to_dict(orient="index")
-
-# points = pickle.load(open(DATA_PATH.joinpath("points.pkl"), "rb"))
-
-
-# Create global chart template
-mapbox_access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNrOWJqb2F4djBnMjEzbG50amg0dnJieG4ifQ.Zme1-Uzoi75IaFbieBDl3A"
-
-layout = dict(
-    autosize=True,
-    automargin=True,
-    margin=dict(l=30, r=30, b=20, t=40),
-    hovermode="closest",
-    plot_bgcolor="#F9F9F9",
-    paper_bgcolor="#F9F9F9",
-    legend=dict(font=dict(size=10), orientation="h"),
-    title="Satellite Overview",
-    mapbox=dict(
-        accesstoken=mapbox_access_token,
-        style="light",
-        center=dict(lon=-78.05, lat=42.54),
-        zoom=7,
-    ),
-)
-app.head = [
-    html.Link(
-        href='https://www.google.com/favicon.ico',
-        rel='icon'
-    ),
-]
 # Create app layout
 app.layout = html.Div(
     [
         dcc.Store(id="aggregate_data"),
         # empty Div to trigger javascript file for graph resizing
         html.Div(id="output-clientside"),
-        html.Div(
+        html.Div
+        (
             [
-                html.Div(
+                html.Div
+                (
                     [
-                        html.Img(
+                        html.Img
+                        (
                             src=app.get_asset_url("dash-logo1.png"),
                             id="plotly-image",
-                            style={
+                            style=
+                            {
                                 "height": "60px",
                                 "width": "auto",
                                 "margin-bottom": "25px",
@@ -124,15 +80,19 @@ app.layout = html.Div(
                     ],
                     className="one-third column",
                 ),
-                html.Div(
+                html.Div
+                (
                     [
-                        html.Div(
+                        html.Div
+                        (
                             [
-                                html.H4(
+                                html.H4
+                                (
                                     "Data Modelling & Analysing Coronavirus: Exploratory Analysis",
                                     style={"margin-bottom": "0px"},
                                 ),
-                                html.H5(
+                                html.H5
+                                (
                                     "Covid19 Pandamic Overview", style={"margin-top": "0px"}
                                 ),
                             ]
@@ -141,9 +101,11 @@ app.layout = html.Div(
                     className="one-half column",
                     id="title",
                 ),
-                html.Div(
+                html.Div
+                (
                     [
-                        html.A(
+                        html.A
+                        (
                             html.Button("Developer Info", id="learn-more-button"),
                             href="http://www.harishmalan.com/",
                         )
@@ -156,32 +118,35 @@ app.layout = html.Div(
             className="row flex-display",
             style={"margin-bottom": "25px"},
         ),
-        html.Div(
+        html.Div
+        (
             [
                  html.Div(
                      [
-                         html.Div(
+                         html.Div
+                         (
                              [
-                    html.Div(
-                        [ 
-                            
-                            html.P(
-                            "Covid19 Analysis (select Country from Dropdown):")],
+                                 html.Div
+                                 (
+                                     [ 
+                                         html.P("Covid19 Analysis (select Country from Dropdown):")
+                                    ],
                             className="control_label",
-                    ),
-                        html.Div(
-                            [
-                        
-                        dcc.Dropdown(
-                            id="well_statuses",
-                            options=county_options,
-                            value= 'Singapore',
-                            multi=False,)],
-                            className="dcc_control six columns",
-                        ),
-                        ],
+                            ),
+                            html.Div
+                            (
+                                [
+                                    dcc.Dropdown(
+                                    id="country_dropdown",
+                                    options=county_options,
+                                    value= 'Singapore',
+                                    multi=False,)
+                                ],
+                                className="dcc_control six columns",
+                            ),
+                            ],
                         id="info-container-left",
-                            className="row container-display",
+                        className="row container-display",
                          ),
                          html.Div(
                              [
@@ -225,12 +190,7 @@ app.layout = html.Div(
                                               style={"display": "block", "margin-left": "auto", "margin-right": "auto",
                                                      "width": "70%"},
                                               className="six columns")], className="row"),
-                        # html.Div(
-                        #     [dcc.Graph(id="count_graph_left")],
-                        #     id="countGraphContainer_letft",
-                        #     className="pretty_container",
-                        # ),
-                         html.Div(id='count_graph_left'),
+                         html.Div(id='country_metric'),
                     ],
                     className="pretty_container six columns",
                     id="cross-filter-options",
@@ -282,13 +242,7 @@ app.layout = html.Div(
                                               style={"display": "block", "margin-left": "auto", "margin-right": "auto",
                                                      "width": "70%"},
                                               className="six columns")], className="row"),
-                        # html.Div(
-                        #     [dcc.Graph(id="count_graph")],
-                        #     id="countGraphContainer",
-                        #     className="pretty_container",
-                        #Country	Confirmed	Deaths	Recovered	Active	New cases	Deaths / 100 Cases	Recovered / 100 Cases	Deaths / 100 Recovered	iso_alpha
-                        # ),
-                        dcc.Graph(id="my-graph")
+                        dcc.Graph(id="world_matrix")
                     ],
                     id="right-column",
                     className="pretty_container six columns",
@@ -299,12 +253,12 @@ app.layout = html.Div(
         html.Div(
             [
                 html.Div(
-                    [html.Div(id="main_graph")],
+                    [html.Div(id="country_wide_graph")],
                     className="pretty_container six columns",
                 ),
                 html.Div(
-                    #[dcc.Graph(id="individual_graph")],
-                     [html.Div(id='individual_graph')],
+                    #[dcc.Graph(id="world_wide_graph")],
+                     [html.Div(id='world_wide_graph')],
                     className="pretty_container six columns",
                 ),
             ],
@@ -313,11 +267,11 @@ app.layout = html.Div(
         html.Div(
             [
                 html.Div(
-                    [html.Div(id="main_graph_pred")],
+                    [html.Div(id="country_sir_pred")],
                     className="pretty_container six columns",
                 ),
                 html.Div(
-                    [html.Div(id="main_graph_preds")],
+                    [html.Div(id="death_recovery_martix")],
                     className="pretty_container six columns",
                 ),
             ],
@@ -462,11 +416,11 @@ https://science.sciencemag.org/content/early/2020/03/05/science.aba9757/tab-figu
     Output("new_left", "children"),
     ],
     [
-        Input("well_statuses", "value"),
+        Input("country_dropdown", "value"),
     ],
 )
-def update_well_text(well_statuses):
-    temp= country_wise[country_wise['Country']==well_statuses]
+def update_well_text(country_dropdown):
+    temp= country_wise[country_wise['Country']==country_dropdown]
     return temp['Confirmed'],temp['Deaths'], temp['Recovered'], temp['New cases']
 
 @app.callback(
@@ -477,12 +431,12 @@ def update_well_text(well_statuses):
          Output("world_new", "children"),
     ],
     [
-        Input("well_statuses", "value"),
+        Input("country_dropdown", "value"),
     ],
 )
-def update_well_text(well_statuses):
+def update_well_text(country_dropdown):
 
-    # dff = filter_dataframe(well_statuses)
+    # dff = filter_dataframe(country_dropdown)
     temp = covid19_country.groupby('Date')['Confirmed', 'Deaths', 'Recovered', 'Active', 'New cases'].sum().reset_index()
     temp = temp[temp['Date']==max(temp['Date'])].reset_index(drop=True)
     return temp['Confirmed'],temp['Deaths'], temp['Recovered'], temp['New cases']
@@ -525,6 +479,7 @@ def update_graphs(rows, derived_virtual_selected_rows):
         derived_virtual_selected_rows = []
 
     dff = country_wise if rows is None else pd.DataFrame(rows)
+    dff = dff.sort_values(by=['New cases'],ascending=False).head(50)
 
     colors = ['#7FDBFF' if i in derived_virtual_selected_rows else '#0074D9'
               for i in range(len(dff))]
@@ -555,25 +510,25 @@ def update_graphs(rows, derived_virtual_selected_rows):
         # check if column exists - user may have deleted it
         # If `column.deletable=False`, then you don't
         # need to do this check.
-        for column in ["New cases","Confirmed", "Deaths", "Recovered"] if column in dff
+        for column in ["New cases","Confirmed", "Deaths", "Recovered", "Active"] if column in dff
     ]
 # @app.callback(
 #     Output('count_graph', "children"),
 @app.callback(
-    dash.dependencies.Output("my-graph", "figure"),
+    dash.dependencies.Output("world_matrix", "figure"),
     [dash.dependencies.Input("value-selected", "value")]
 )
 def update_figure(selected):
     
     dff =country_wise
 
-    def title(text):
-        if text == "pop":
-            return "Poplulation (million)"
-        elif text == "gdpPercap":
-            return "GDP Per Capita (USD)"
-        else:
-            return "Life Expectancy (Years)"
+    # def title(text):
+    #     if text == "pop":
+    #         return "Poplulation (million)"
+    #     elif text == "gdpPercap":
+    #         return "GDP Per Capita (USD)"
+    #     else:
+    #         return "Life Expectancy (Years)"
     trace = go.Choropleth(locations=dff['iso_alpha'],z=dff[selected],text=dff['Country'],autocolorscale=True,
                           colorscale="GnBu",marker={'line': {'color': 'rgb(180,180,180)','width': 0.5}},
                           colorbar={
@@ -584,14 +539,14 @@ def update_figure(selected):
 
 
 @app.callback(
-    Output(component_id='count_graph_left', component_property='children'),
-    [Input(component_id='well_statuses', component_property='value'),
+    Output(component_id='country_metric', component_property='children'),
+    [Input(component_id='country_dropdown', component_property='value'),
     Input(component_id='value-selected_left', component_property='value')]
 )
-def update_value(well_statuses, selected_left):
+def update_value(country_dropdown, selected_left):
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
-    dff= covid19_country[covid19_country['Country']==well_statuses]
+    dff= covid19_country[covid19_country['Country']==country_dropdown]
     dff.reset_index(inplace=True)
     dff.set_index("Date", inplace=True)
 
@@ -599,10 +554,10 @@ def update_value(well_statuses, selected_left):
         id='example-graph',
         figure={
             'data': [
-                {'x': dff.index, 'y': dff[selected_left], 'type': 'lines+markers', 'name': well_statuses, 'mode':'lines+markers'},
+                {'x': dff.index, 'y': dff[selected_left], 'type': 'lines+markers', 'name': country_dropdown, 'mode':'lines+markers'},
             ],
             'layout': {
-                'title': "Total New cases ("+well_statuses+")",
+                'title': "Total New cases ("+country_dropdown+")",
                  'yaxis_title': "New confirmed Cases",
                  'x_axis_tickangle': 315
             }
@@ -610,10 +565,10 @@ def update_value(well_statuses, selected_left):
     )
 
 @app.callback(
-    Output(component_id='individual_graph', component_property='children'),
-    [Input(component_id='well_statuses', component_property='value')]
+    Output(component_id='world_wide_graph', component_property='children'),
+    [Input(component_id='country_dropdown', component_property='value')]
 )
-def update_value(well_statuses):
+def update_value(country_dropdown):
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
     dff= day_wise
@@ -658,21 +613,21 @@ def update_value(well_statuses):
     )
 
 @app.callback(
-    Output(component_id='main_graph', component_property='children'),
-    [Input(component_id='well_statuses', component_property='value')]
+    Output(component_id='country_wide_graph', component_property='children'),
+    [Input(component_id='country_dropdown', component_property='value')]
 )
-def update_value(well_statuses):
-    layout_aggregate = copy.deepcopy(layout)
+def update_value(country_dropdown):
+    #layout_aggregate = copy.deepcopy(layout)
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
-    dff= covid19_country[covid19_country['Country']==well_statuses]
+    dff= covid19_country[covid19_country['Country']==country_dropdown]
 
 
     return dcc.Graph(
         id='example-graph',
         figure={
             'data': [
-                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': well_statuses, 'mode':'lines+markers', 'name':"Confirmed"},
+                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': country_dropdown, 'mode':'lines+markers', 'name':"Confirmed"},
                 dict(
                     type="scatter",
                     mode="lines",
@@ -700,21 +655,21 @@ def update_value(well_statuses):
                 
             ],
             'layout': {
-                'title': "Country Wide Report ("+well_statuses+")",
+                'title': "Country Wide Report ("+country_dropdown+")",
                  'y_title': "New confirmed Cases",
                  'x_axis_tickangle': 180
             }
         }
     )
 @app.callback(
-    Output(component_id='main_graph_pred', component_property='children'),
-    [Input(component_id='well_statuses', component_property='value')]
+    Output(component_id='country_sir_pred', component_property='children'),
+    [Input(component_id='country_dropdown', component_property='value')]
 )
-def update_value(well_statuses):
-    layout_aggregate = copy.deepcopy(layout)
+def update_value(country_dropdown):
+    #layout_aggregate = copy.deepcopy(layout)
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
-    dff = pd.read_csv(DATA_PATH.joinpath(well_statuses+".csv"),low_memory=False, index_col=0)
+    dff = pd.read_csv(DATA_PATH.joinpath(country_dropdown+".csv"),low_memory=False, index_col=0)
     # dff.reset_index(inplace=True)
     # dff.set_index("Date", inplace=True)
 
@@ -722,7 +677,7 @@ def update_value(well_statuses):
         id='example-graph',
         figure={
             'data': [
-                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': well_statuses, 'mode':'lines+markers', 'name':"Confirmed"},
+                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': country_dropdown, 'mode':'lines+markers', 'name':"Confirmed"},
                 dict(
                     type="scatter",
                     mode="lines",
@@ -750,18 +705,18 @@ def update_value(well_statuses):
                 
             ],
             'layout': {
-                'title': "Predicting Suspect Infection Curve Report ("+well_statuses+")",
+                'title': "Predicting Suspect Infection Curve Report ("+country_dropdown+")",
                  'y_title': "New confirmed Cases",
                  'x_axis_tickangle': 180
             }
         }
     )
 @app.callback(
-    Output(component_id='main_graph_preds', component_property='children'),
-    [Input(component_id='well_statuses', component_property='value')]
+    Output(component_id='death_recovery_martix', component_property='children'),
+    [Input(component_id='country_dropdown', component_property='value')]
 )
-def update_value(well_statuses):
-    layout_aggregate = copy.deepcopy(layout)
+def update_value(country_dropdown):
+    #layout_aggregate = copy.deepcopy(layout)
     # day_wise.reset_index(inplace=True)
     # day_wise.set_index("Date", inplace=True)
     dff = day_wise
@@ -772,7 +727,7 @@ def update_value(well_statuses):
         id='example-graph1',
         figure={
             'data': [
-                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': well_statuses, 'mode':'lines+markers', 'name':"Confirmed"},
+                #{'x': dff.index, 'y': dff['Confirmed'], 'type': 'lines', 'name': country_dropdown, 'mode':'lines+markers', 'name':"Confirmed"},
                 dict(
                     type="scatter",
                     mode="lines",
