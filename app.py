@@ -705,7 +705,7 @@ def update_value(country_dropdown):
                 
             ],
             'layout': {
-                'title': "Predicting Suspect Infection Curve Report ("+country_dropdown+")",
+                'title': "Predicting Suspect Infection Recovery Curve  ("+country_dropdown+")",
                  'y_title': "New confirmed Cases",
                  'x_axis_tickangle': 180
             }
